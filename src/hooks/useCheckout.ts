@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCartStore } from '../store/cartStore';
+import { useOrderStore } from '../store/orderStore';
 import { processPayment } from '../services/paymentService';
 import { getShippingCost } from '../services/argentina';
 import type { ShippingFormData, CardFormData } from '../services/validationSchemas';
@@ -9,6 +10,7 @@ export type CheckoutStep = 'shipping' | 'payment' | 'confirmation';
 
 export function useCheckout() {
   const { items, subtotal, clearCart } = useCartStore();
+  const addOrder = useOrderStore((s) => s.addOrder);
   const [step, setStep] = useState<CheckoutStep>('shipping');
   const [shipping, setShipping] = useState<ShippingFormData | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>('idle');
@@ -42,8 +44,23 @@ export function useCheckout() {
     );
 
     if (result.status === 'success') {
-      setTransactionId(result.transactionId ?? null);
+      const orderId = result.transactionId ?? `ORD-${Date.now()}`;
+      setTransactionId(orderId);
       setPaymentStatus('success');
+
+      addOrder({
+        id: orderId,
+        createdAt: new Date().toISOString(),
+        status: 'pendiente',
+        paymentMethod: method,
+        shipping: shipping!,
+        items: [...items],
+        subtotal: subtotal(),
+        shippingCost,
+        total,
+        installments: cardData?.installments,
+      });
+
       clearCart();
       setStep('confirmation');
     } else {

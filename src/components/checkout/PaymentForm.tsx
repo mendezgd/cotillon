@@ -95,34 +95,20 @@ export function PaymentForm({ onSubmit, status, errorMessage, onBack }: Props) {
 
       {/* ── MercadoPago ── */}
       {method === 'mercadopago' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{
-            borderRadius: '10px', border: '1px solid var(--border)',
-            backgroundColor: 'var(--tint)', padding: '16px',
-            display: 'flex', flexDirection: 'column', gap: '10px',
-          }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>
-              🔵 Pagá con MercadoPago
-            </p>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-              Aceptamos saldo de cuenta, tarjetas de débito/crédito, y Mercado Crédito — todo dentro de MercadoPago.
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px' }}>
-                <span style={{ color: 'var(--text-muted)' }}>Alias</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 500, color: 'var(--text)', fontFamily: 'monospace' }}>
-                  {MP_INFO.alias}
-                  <CopyButton text={MP_INFO.alias} />
-                </span>
-              </div>
-            </div>
-            <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-              Al confirmar te enviaremos el link de pago a tu email.
-            </p>
-          </div>
-          {errorMessage && <ErrorBox message={errorMessage} />}
-          <ActionButtons isProcessing={isProcessing} onBack={onBack} onConfirm={handleConfirm} label="Confirmar con MercadoPago" btnBase={btnBase} />
-        </div>
+        <TransferPanel
+          emoji="🔵"
+          title="Transferencia por MercadoPago"
+          rows={[
+            { label: 'Alias MP', value: MP_INFO.alias, copy: true },
+          ]}
+          instructions={`Realizá la transferencia al alias de MercadoPago y enviá el comprobante a ventas@fiestamagica.ar con tu nombre y número de orden. Confirmamos el pedido al recibir el comprobante.`}
+          isProcessing={isProcessing}
+          errorMessage={errorMessage}
+          onBack={onBack}
+          onConfirm={handleConfirm}
+          confirmLabel="Confirmar pedido"
+          btnBase={btnBase}
+        />
       )}
 
       {/* ── Tarjeta ── */}
@@ -212,31 +198,24 @@ export function PaymentForm({ onSubmit, status, errorMessage, onBack }: Props) {
 
       {/* ── Transferencia bancaria ── */}
       {method === 'transfer' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ borderRadius: '10px', border: '1px solid var(--border)', backgroundColor: 'var(--tint)', padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>🏦 Datos bancarios</p>
-            {([
-              { label: 'Banco',    value: TRANSFER_INFO.bank },
-              { label: 'CBU',      value: TRANSFER_INFO.cbu },
-              { label: 'Alias',    value: TRANSFER_INFO.alias },
-              { label: 'CUIT',     value: TRANSFER_INFO.cuit },
-              { label: 'Titular',  value: TRANSFER_INFO.owner },
-            ] as const).map(({ label, value }) => (
-              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px', gap: '8px' }}>
-                <span style={{ color: 'var(--text-muted)', flexShrink: 0 }}>{label}</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 500, color: 'var(--text)', fontFamily: label === 'CBU' || label === 'Alias' || label === 'CUIT' ? 'monospace' : 'inherit', wordBreak: 'break-all', textAlign: 'right' }}>
-                  {value}
-                  {(label === 'CBU' || label === 'Alias') && <CopyButton text={value} />}
-                </span>
-              </div>
-            ))}
-            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px', lineHeight: 1.5 }}>
-              Enviá el comprobante a <strong>ventas@fiestamagica.ar</strong> con tu número de orden. Acreditamos en 24 hs hábiles.
-            </p>
-          </div>
-          {errorMessage && <ErrorBox message={errorMessage} />}
-          <ActionButtons isProcessing={isProcessing} onBack={onBack} onConfirm={handleConfirm} label="Confirmar pedido" btnBase={btnBase} />
-        </div>
+        <TransferPanel
+          emoji="🏦"
+          title="Transferencia bancaria"
+          rows={[
+            { label: 'Banco',   value: TRANSFER_INFO.bank },
+            { label: 'CBU',     value: TRANSFER_INFO.cbu,   copy: true, mono: true },
+            { label: 'Alias',   value: TRANSFER_INFO.alias, copy: true, mono: true },
+            { label: 'CUIT',    value: TRANSFER_INFO.cuit,  mono: true },
+            { label: 'Titular', value: TRANSFER_INFO.owner },
+          ]}
+          instructions={`Realizá la transferencia y enviá el comprobante a ventas@fiestamagica.ar con tu nombre y número de orden. Confirmamos el pedido al recibir el comprobante (24 hs hábiles).`}
+          isProcessing={isProcessing}
+          errorMessage={errorMessage}
+          onBack={onBack}
+          onConfirm={handleConfirm}
+          confirmLabel="Confirmar pedido"
+          btnBase={btnBase}
+        />
       )}
     </div>
   );
@@ -279,6 +258,37 @@ function ActionButtons({ isProcessing, onBack, onConfirm, label, btnBase }: {
       <button type="button" onClick={onConfirm} disabled={isProcessing} style={{ ...btnBase, flex: 2, color: 'var(--action-text)', backgroundColor: 'var(--action-bg)', boxShadow: 'var(--btn-shadow)', opacity: isProcessing ? 0.7 : 1 }}>
         {isProcessing ? <><Spinner />Procesando...</> : label}
       </button>
+    </div>
+  );
+}
+
+interface TransferRow { label: string; value: string; copy?: boolean; mono?: boolean }
+
+function TransferPanel({ emoji, title, rows, instructions, isProcessing, errorMessage, onBack, onConfirm, confirmLabel, btnBase }: {
+  emoji: string; title: string; rows: TransferRow[];
+  instructions: string; isProcessing: boolean; errorMessage: string | null;
+  onBack: () => void; onConfirm: () => void; confirmLabel: string;
+  btnBase: React.CSSProperties;
+}) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div style={{ borderRadius: '10px', border: '1px solid var(--border)', backgroundColor: 'var(--tint)', padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>{emoji} {title}</p>
+        {rows.map(({ label, value, copy, mono }) => (
+          <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px', gap: '8px' }}>
+            <span style={{ color: 'var(--text-muted)', flexShrink: 0 }}>{label}</span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 500, color: 'var(--text)', fontFamily: mono ? 'monospace' : 'inherit', wordBreak: 'break-all', textAlign: 'right' }}>
+              {value}
+              {copy && <CopyButton text={value} />}
+            </span>
+          </div>
+        ))}
+        <div style={{ marginTop: '6px', padding: '10px', borderRadius: '6px', backgroundColor: 'var(--tint-md)', border: '1px solid var(--border)', fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+          📧 {instructions}
+        </div>
+      </div>
+      {errorMessage && <ErrorBox message={errorMessage} />}
+      <ActionButtons isProcessing={isProcessing} onBack={onBack} onConfirm={onConfirm} label={confirmLabel} btnBase={btnBase} />
     </div>
   );
 }

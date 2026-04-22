@@ -47,6 +47,27 @@ export interface PaymentData {
 
 export type PaymentStatus = 'idle' | 'processing' | 'success' | 'error';
 
+export type OrderStatus =
+  | 'pendiente'             // esperando comprobante
+  | 'comprobante_recibido'  // comprobante llegó, pago a verificar
+  | 'confirmado'            // pago verificado, listo para despachar
+  | 'enviado'               // en camino
+  | 'cancelado';
+
+export interface Order {
+  id: string;           // = transactionId del backend simulado
+  createdAt: string;    // ISO date string
+  status: OrderStatus;
+  paymentMethod: PaymentMethod;
+  shipping: ShippingAddress;
+  items: CartItem[];
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+  installments?: number;
+  notes?: string;
+}
+
 export interface OrderSummary {
   items: CartItem[];
   subtotal: number;

@@ -1,0 +1,138 @@
+/* Reference: ./DESIGN.md — Lovable/Claude design system */
+import type { Product } from '../types';
+
+// picsum.photos/seed/{seed}/400/400 — always-available, deterministic images
+export const PRODUCTS: Product[] = [
+  {
+    id: '1',
+    name: 'Globos Metalizados Pastel x10',
+    description: 'Set de 10 globos metalizados en tonos pastel. Perfectos para cualquier celebración.',
+    price: 1200,
+    image: 'https://picsum.photos/seed/globos-pastel/400/400',
+    category: 'globos',
+    stock: 50,
+    badge: 'popular',
+  },
+  {
+    id: '2',
+    name: 'Globo Gigante Corazón',
+    description: 'Globo foil en forma de corazón, ideal para San Valentín y cumpleaños.',
+    price: 850,
+    image: 'https://picsum.photos/seed/globo-corazon/400/400',
+    category: 'globos',
+    stock: 30,
+    badge: 'nuevo',
+  },
+  {
+    id: '3',
+    name: 'Guirnalda Papel Kraft',
+    description: 'Guirnalda decorativa de papel kraft con pompones de colores.',
+    price: 950,
+    image: 'https://picsum.photos/seed/guirnalda/400/400',
+    category: 'decoracion',
+    stock: 25,
+  },
+  {
+    id: '4',
+    name: 'Kit Banner Feliz Cumpleaños',
+    description: 'Banner personalizable con letras doradas. Incluye colgantes.',
+    price: 1500,
+    image: 'https://picsum.photos/seed/banner-cumple/400/400',
+    category: 'decoracion',
+    stock: 40,
+    badge: 'popular',
+  },
+  {
+    id: '5',
+    name: 'Disfraz Unicornio Niña',
+    description: 'Disfraz de unicornio con capucha y cola. Tallas S, M y L.',
+    price: 3200,
+    image: 'https://picsum.photos/seed/unicornio/400/400',
+    category: 'disfraces',
+    stock: 15,
+    badge: 'nuevo',
+  },
+  {
+    id: '6',
+    name: 'Disfraz Superhéroe Set',
+    description: 'Kit completo: capa, máscara y cinturón. Varios diseños.',
+    price: 2800,
+    image: 'https://picsum.photos/seed/superheroe/400/400',
+    category: 'disfraces',
+    stock: 20,
+  },
+  {
+    id: '7',
+    name: 'Set Cotillón Fiesta x20',
+    description: 'Set 20 piezas: sonajas, antifaces, sombreros y más.',
+    price: 2100,
+    image: 'https://picsum.photos/seed/cotillon-set/400/400',
+    category: 'cotillon',
+    stock: 60,
+    badge: 'oferta',
+    discountPercent: 20,
+  },
+  {
+    id: '8',
+    name: 'Piñata Estrella Clásica',
+    description: 'Piñata tradicional de 7 puntas. Incluye palo decorado.',
+    price: 1800,
+    image: 'https://picsum.photos/seed/pinata-estrella/400/400',
+    category: 'piñatas',
+    stock: 18,
+  },
+  {
+    id: '9',
+    name: 'Piñata Personaje Animado',
+    description: 'Piñata con diseño de personaje popular. Sorpresa incluida.',
+    price: 2400,
+    image: 'https://picsum.photos/seed/pinata-personaje/400/400',
+    category: 'piñatas',
+    stock: 10,
+    badge: 'popular',
+  },
+  {
+    id: '10',
+    name: 'Confetti Cañón x2',
+    description: 'Cañones de confetti multicolor. Explosión de 50cm.',
+    price: 680,
+    image: 'https://picsum.photos/seed/confetti/400/400',
+    category: 'cotillon',
+    stock: 100,
+    badge: 'oferta',
+    discountPercent: 15,
+  },
+  {
+    id: '11',
+    name: 'Velas Numéricas Doradas',
+    description: 'Set de velas en forma de número 0-9. Color dorado brillante.',
+    price: 450,
+    image: 'https://picsum.photos/seed/velas-doradas/400/400',
+    category: 'decoracion',
+    stock: 80,
+  },
+  {
+    id: '12',
+    name: 'Globos LED Luminosos x5',
+    description: 'Globos transparentes con luz LED de colores. Pilas incluidas.',
+    price: 1650,
+    image: 'https://picsum.photos/seed/globos-led/400/400',
+    category: 'globos',
+    stock: 35,
+    badge: 'nuevo',
+  },
+];
+
+export function getProductsByCategory(category: string): Product[] {
+  if (category === 'todos') return PRODUCTS;
+  return PRODUCTS.filter((p) => p.category === category);
+}
+
+export const CATEGORIES = [
+  { id: 'todos', label: 'Todos', emoji: '✨' },
+  { id: 'globos', label: 'Globos', emoji: '🎈' },
+  { id: 'decoracion', label: 'Decoración', emoji: '🎀' },
+  { id: 'disfraces', label: 'Disfraces', emoji: '🦄' },
+  { id: 'cotillon', label: 'Cotillón', emoji: '🎉' },
+  { id: 'piñatas', label: 'Piñatas', emoji: '⭐' },
+] as const;

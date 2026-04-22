@@ -1,9 +1,10 @@
-/* Reference: ./DESIGN.md §5 Layout — hero 96px+ padding, stats bar, editorial typography */
+/* Reference: ./DESIGN.md §5 Layout — hero carousel, stats bar, editorial typography */
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Star, Shield, Zap } from 'lucide-react';
 import { CATEGORIES } from '../services/products';
 import { Container } from '../components/ui/Container';
+import { HeroCarousel } from '../components/HeroCarousel';
 
 const CATEGORY_ACCENT: Record<string, { bg: string; text: string; border: string }> = {
   globos:    { bg: 'var(--cat-globos)',    text: 'var(--cat-globos-text)',    border: 'rgba(234,179,8,0.3)' },
@@ -23,71 +24,8 @@ export function HomePage() {
   return (
     <div style={{ width: '100%' }}>
 
-      {/* ── Hero ── */}
-      <section style={{ width: '100%', padding: '104px 0 96px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        {/* Warm festive gradient — pinks, amber, purple */}
-        <div aria-hidden style={{
-          pointerEvents: 'none', position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 70% 50% at 20% 20%, rgba(251,191,36,0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 45% at 80% 15%, rgba(244,114,182,0.14) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 50% 80%, rgba(167,139,250,0.10) 0%, transparent 65%)',
-        }} />
-        {/* Floating emoji decoration */}
-        <div aria-hidden style={{ pointerEvents: 'none', position: 'absolute', inset: 0, overflow: 'hidden' }}>
-          {['🎈', '🎉', '✨', '🎊', '🥳', '🎀'].map((emoji, i) => (
-            <span key={i} style={{
-              position: 'absolute', fontSize: '22px', opacity: 0.18,
-              top: `${[18, 72, 30, 60, 14, 68][i]}%`,
-              left: `${[8, 12, 88, 85, 50, 94][i]}%`,
-              transform: `rotate(${[-15, 10, 20, -10, 5, -20][i]}deg)`,
-            }}>{emoji}</span>
-          ))}
-        </div>
-        <Container>
-          <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }}>
-            <span style={{
-              display: 'inline-block', fontSize: '12px', fontWeight: 600,
-              color: 'var(--cat-cotillon-text)', backgroundColor: 'var(--cat-cotillon)',
-              border: '1px solid rgba(225,29,72,0.2)', borderRadius: '9999px',
-              padding: '4px 14px', marginBottom: '24px', letterSpacing: '0.06em', textTransform: 'uppercase',
-            }}>
-              Todo para tu fiesta perfecta ✨
-            </span>
-            <h1 style={{
-              fontSize: 'clamp(2.4rem,6vw,4rem)', fontWeight: 700,
-              lineHeight: 1.06, letterSpacing: '-1.5px', color: 'var(--text)',
-              marginBottom: '24px',
-            }}>
-              Hacé que cada<br />celebración sea mágica
-            </h1>
-            <p style={{ fontSize: '18px', lineHeight: 1.5, color: 'var(--text-muted)', maxWidth: '400px', margin: '0 auto 40px' }}>
-              Globos, disfraces, decoración y cotillón. Envío a todo el país.
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px' }}>
-              <Link to="/productos" style={{
-                display: 'inline-flex', alignItems: 'center', gap: '8px',
-                padding: '11px 22px', borderRadius: '8px', fontSize: '14px', fontWeight: 600,
-                color: 'var(--action-text)', backgroundColor: 'var(--action-bg)',
-                textDecoration: 'none', boxShadow: 'var(--btn-shadow)', transition: 'opacity 0.15s',
-              }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.8')}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-              >
-                Ver productos <ArrowRight style={{ width: 14, height: 14 }} />
-              </Link>
-              <Link to="/productos?categoria=cotillon" style={{
-                display: 'inline-flex', alignItems: 'center',
-                padding: '11px 22px', borderRadius: '8px', fontSize: '14px', fontWeight: 600,
-                color: 'var(--text)', backgroundColor: 'transparent',
-                border: '1px solid var(--border-act)', textDecoration: 'none', transition: 'opacity 0.15s',
-              }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-              >
-                Ver ofertas 🎊
-              </Link>
-            </div>
-          </motion.div>
-        </Container>
-      </section>
+      {/* ── Hero Carousel ── */}
+      <HeroCarousel />
 
       {/* ── Stats Bar ── */}
       <section style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', backgroundColor: 'var(--bg-subtle)', padding: '40px 0', transition: 'background-color 0.25s ease' }}>

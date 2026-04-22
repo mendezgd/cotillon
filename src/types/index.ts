@@ -25,6 +25,7 @@ export interface CartItem {
 
 export interface ShippingAddress {
   fullName: string;
+  dni: string;
   email: string;
   phone: string;
   address: string;
@@ -33,11 +34,15 @@ export interface ShippingAddress {
   postalCode: string;
 }
 
+export type PaymentMethod = 'mercadopago' | 'card' | 'transfer';
+
 export interface PaymentData {
-  cardNumber: string;
-  cardHolder: string;
-  expiry: string;
-  cvv: string;
+  paymentMethod: PaymentMethod;
+  cardNumber?: string;
+  cardHolder?: string;
+  expiry?: string;
+  cvv?: string;
+  installments?: number;
 }
 
 export type PaymentStatus = 'idle' | 'processing' | 'success' | 'error';

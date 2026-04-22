@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useCartStore } from '../store/cartStore';
 import { processPayment } from '../services/paymentService';
-import type { ShippingFormData, PaymentFormData } from '../services/validationSchemas';
-import type { PaymentStatus } from '../types';
+import { getShippingCost } from '../services/argentina';
+import type { ShippingFormData, CardFormData } from '../services/validationSchemas';
+import type { PaymentMethod, PaymentStatus } from '../types';
 
 export type CheckoutStep = 'shipping' | 'payment' | 'confirmation';
 
@@ -13,8 +14,9 @@ export function useCheckout() {
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>('idle');
   const [transactionId, setTransactionId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
 
-  const shippingCost = subtotal() >= 10000 ? 0 : 850;
+  const shippingCost = getShippingCost(subtotal(), shipping?.province ?? '');
   const total = subtotal() + shippingCost;
 
   const submitShipping = (data: ShippingFormData) => {
@@ -22,23 +24,21 @@ export function useCheckout() {
     setStep('payment');
   };
 
-  const submitPayment = async (data: PaymentFormData) => {
+  const submitPayment = async (method: PaymentMethod, cardData?: CardFormData) => {
     setPaymentStatus('processing');
+    setPaymentMethod(method);
     setErrorMessage(null);
 
     const result = await processPayment(
       {
-        cardNumber: data.cardNumber,
-        cardHolder: data.cardHolder,
-        expiry: data.expiry,
-        cvv: data.cvv,
+        paymentMethod: method,
+        cardNumber: cardData?.cardNumber,
+        cardHolder: cardData?.cardHolder,
+        expiry: cardData?.expiry,
+        cvv: cardData?.cvv,
+        installments: cardData?.installments,
       },
-      {
-        items,
-        subtotal: subtotal(),
-        shipping: shippingCost,
-        total,
-      },
+      { items, subtotal: subtotal(), shipping: shippingCost, total },
     );
 
     if (result.status === 'success') {
@@ -58,12 +58,14 @@ export function useCheckout() {
     setPaymentStatus('idle');
     setTransactionId(null);
     setErrorMessage(null);
+    setPaymentMethod(null);
   };
 
   return {
     step,
     shipping,
     paymentStatus,
+    paymentMethod,
     transactionId,
     errorMessage,
     shippingCost,

@@ -1,4 +1,4 @@
-import type { PaymentData, OrderSummary, PaymentStatus } from '../types';
+import type { PaymentData, PaymentMethod, OrderSummary, PaymentStatus } from '../types';
 
 export interface PaymentResult {
   status: PaymentStatus;
@@ -6,9 +6,7 @@ export interface PaymentResult {
   errorMessage?: string;
 }
 
-// Simulated SDK — replace with real Mercado Pago / Stripe SDK calls
-const simulateNetworkDelay = (ms: number) =>
-  new Promise<void>((resolve) => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 function luhnCheck(number: string): boolean {
   const digits = number.replace(/\s/g, '').split('').reverse().map(Number);
@@ -22,32 +20,29 @@ function luhnCheck(number: string): boolean {
   return sum % 10 === 0;
 }
 
+function makeTransactionId(method: PaymentMethod) {
+  const prefix = method === 'mercadopago' ? 'MP' : method === 'transfer' ? 'TRF' : 'TXN';
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+}
+
 export async function processPayment(
   payment: PaymentData,
-  order: OrderSummary,
+  _order: OrderSummary,
 ): Promise<PaymentResult> {
-  await simulateNetworkDelay(2000);
+  await delay(1800);
 
-  const cardRaw = payment.cardNumber.replace(/\s/g, '');
-  if (!luhnCheck(cardRaw)) {
-    return { status: 'error', errorMessage: 'Número de tarjeta inválido.' };
+  if (payment.paymentMethod === 'card') {
+    const cardRaw = (payment.cardNumber ?? '').replace(/\s/g, '');
+    if (!luhnCheck(cardRaw)) {
+      return { status: 'error', errorMessage: 'Número de tarjeta inválido.' };
+    }
+    if (Math.random() < 0.08) {
+      return { status: 'error', errorMessage: 'Error de red. Por favor intentá de nuevo.' };
+    }
   }
 
-  // Simulate random network failure ~10% of the time
-  if (Math.random() < 0.1) {
-    return {
-      status: 'error',
-      errorMessage: 'Error de red. Por favor intentá de nuevo.',
-    };
-  }
-
-  const transactionId = `TXN-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
-
-  console.info('[PaymentService] Payment approved', {
-    transactionId,
-    amount: order.total,
-  });
-
+  /* MercadoPago & transfer: always "succeed" at this simulated stage */
+  const transactionId = makeTransactionId(payment.paymentMethod);
   return { status: 'success', transactionId };
 }
 

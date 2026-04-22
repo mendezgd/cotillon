@@ -20,7 +20,7 @@ export function CheckoutPage() {
   const navigate = useNavigate();
   if (items.length === 0) return <Navigate to="/productos" replace />;
 
-  const { step, paymentStatus, transactionId, errorMessage, shippingCost, total, submitShipping, submitPayment, reset, setStep } = useCheckout();
+  const { step, shipping, paymentStatus, paymentMethod, transactionId, errorMessage, shippingCost, total, submitShipping, submitPayment, reset, setStep } = useCheckout();
 
   return (
     <div style={{ width: '100%', padding: '48px 0' }}>
@@ -51,18 +51,27 @@ export function CheckoutPage() {
         {step === 'confirmation' ? (
           <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
             style={{ textAlign: 'center', padding: '64px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-            <div style={{ width: '64px', height: '64px', backgroundColor: 'var(--tint-md)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <CheckCircle style={{ width: 28, height: 28, color: 'var(--text)' }} />
-            </div>
-            <h2 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', fontWeight: 600, letterSpacing: '-0.9px', color: 'var(--text)' }}>¡Compra confirmada!</h2>
-            <p style={{ fontSize: '14px', color: 'var(--text-muted)', maxWidth: '360px' }}>Tu pedido fue procesado correctamente. Recibirás un email de confirmación.</p>
+            <div style={{ fontSize: '56px' }}>🎉</div>
+            <h2 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', fontWeight: 700, letterSpacing: '-0.9px', color: 'var(--text)' }}>¡Pedido confirmado!</h2>
+            <p style={{ fontSize: '14px', color: 'var(--text-muted)', maxWidth: '380px', lineHeight: 1.6 }}>
+              {paymentMethod === 'transfer'
+                ? 'Enviá el comprobante a ventas@fiestamagica.ar con tu número de orden. Procesamos en 24 hs hábiles.'
+                : paymentMethod === 'mercadopago'
+                  ? 'Te enviamos el link de MercadoPago a tu email. Completá el pago para confirmar el envío.'
+                  : 'Tu pago fue procesado correctamente. Recibirás un email de confirmación.'}
+            </p>
             {transactionId && (
               <p style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'monospace', backgroundColor: 'var(--tint)', padding: '6px 16px', borderRadius: '4px', border: '1px solid var(--border)' }}>
-                ID: {transactionId}
+                Orden: {transactionId}
+              </p>
+            )}
+            {shipping && (
+              <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                Entregamos en <strong style={{ color: 'var(--text)' }}>{shipping.city}, {shipping.province}</strong>
               </p>
             )}
             <button onClick={() => { reset(); navigate('/'); }} style={{
-              marginTop: '8px', padding: '10px 20px', borderRadius: '6px', fontSize: '13px', fontWeight: 500,
+              marginTop: '8px', padding: '11px 24px', borderRadius: '8px', fontSize: '13px', fontWeight: 600,
               color: 'var(--action-text)', backgroundColor: 'var(--action-bg)',
               border: 'none', cursor: 'pointer', boxShadow: 'var(--btn-shadow)',
             }}>
@@ -85,7 +94,7 @@ export function CheckoutPage() {
                 )}
               </AnimatePresence>
             </div>
-            <div><OrderSummaryPanel shippingCost={shippingCost} total={total} /></div>
+            <div><OrderSummaryPanel shippingCost={shippingCost} total={total} province={shipping?.province} /></div>
           </div>
         )}
       </Container>

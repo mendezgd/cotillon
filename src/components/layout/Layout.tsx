@@ -1,6 +1,6 @@
 /* Reference: ./DESIGN.md */
 import { Outlet, Link } from 'react-router-dom';
-import { Sparkles, Heart, Star, Mail } from 'lucide-react';
+import { Heart, Star, Mail } from 'lucide-react';
 import { Navbar } from './Navbar';
 import { CartSidebar } from '../cart/CartSidebar';
 
@@ -16,8 +16,20 @@ export function Layout() {
         <div style={{ maxWidth: '1152px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: '40px' }}>
           {/* Brand */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, fontSize: '16px', color: 'var(--text)' }}>
-              <Sparkles style={{ width: 16, height: 16, opacity: 0.5 }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '9px', fontWeight: 700, fontSize: '16px', color: 'var(--text)', letterSpacing: '-0.3px' }}>
+              <svg width="18" height="22" viewBox="0 0 64 76" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <defs>
+                  <radialGradient id="footerBalloon" cx="38%" cy="28%" r="65%">
+                    <stop offset="0%" stopColor="#fbbf24"/>
+                    <stop offset="55%" stopColor="#f472b6"/>
+                    <stop offset="100%" stopColor="#db2777"/>
+                  </radialGradient>
+                </defs>
+                <ellipse cx="32" cy="26" rx="28" ry="26" fill="url(#footerBalloon)"/>
+                <ellipse cx="25" cy="16" rx="8" ry="5.5" fill="white" opacity="0.35" transform="rotate(-25 25 16)"/>
+                <ellipse cx="32" cy="52" rx="4" ry="2.5" fill="#be185d"/>
+                <path d="M32 54.5 Q26 63 31 74" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
               FiestaMágica
             </div>
             <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: '220px' }}>

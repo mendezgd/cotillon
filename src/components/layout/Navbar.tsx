@@ -1,6 +1,6 @@
 /* Reference: ./DESIGN.md §4 Navigation */
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, Sparkles, Menu, X, Sun, Moon } from 'lucide-react';
+import { ShoppingCart, Menu, X, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore';
@@ -49,8 +49,21 @@ export function Navbar() {
         <nav style={{ height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
           {/* Logo */}
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: 'var(--text)', fontWeight: 600, fontSize: '15px' }}>
-            <Sparkles style={{ width: 16, height: 16, opacity: 0.5 }} />
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '9px', textDecoration: 'none', color: 'var(--text)', fontWeight: 700, fontSize: '15px', letterSpacing: '-0.3px' }}>
+            {/* Balloon logo mark */}
+            <svg width="22" height="26" viewBox="0 0 64 76" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+              <defs>
+                <radialGradient id="navBalloon" cx="38%" cy="28%" r="65%">
+                  <stop offset="0%" stopColor="#fbbf24"/>
+                  <stop offset="55%" stopColor="#f472b6"/>
+                  <stop offset="100%" stopColor="#db2777"/>
+                </radialGradient>
+              </defs>
+              <ellipse cx="32" cy="26" rx="28" ry="26" fill="url(#navBalloon)"/>
+              <ellipse cx="25" cy="16" rx="8" ry="5.5" fill="white" opacity="0.35" transform="rotate(-25 25 16)"/>
+              <ellipse cx="32" cy="52" rx="4" ry="2.5" fill="#be185d"/>
+              <path d="M32 54.5 Q26 63 31 74" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
             FiestaMágica
           </Link>
 

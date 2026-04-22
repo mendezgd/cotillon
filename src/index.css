@@ -1,6 +1,47 @@
-/* ./DESIGN.md — Lovable/Claude design system */
+/* ./DESIGN.md — Lovable/Claude design system — light & dark tokens */
 @import "tailwindcss";
 
+/* ── Light (default) ─────────────────────────────────────────── */
+:root {
+  --bg:           #f7f4ed;   /* parchment cream — page & card surface  */
+  --bg-subtle:    #fcfbf8;   /* off-white — stats bar, secondary fills  */
+  --text:         #1c1c1c;   /* charcoal — primary text & headings       */
+  --text-muted:   #5f5f5d;   /* muted gray — secondary text              */
+  --border:       #eceae4;   /* warm divider — passive borders           */
+  --border-act:   rgba(28,28,28,0.4);   /* interactive border            */
+  --action-bg:    #1c1c1c;   /* primary button background                */
+  --action-text:  #fcfbf8;   /* primary button text                      */
+  --overlay:      rgba(28,28,28,0.35);  /* sidebar backdrop              */
+  --tint:         rgba(28,28,28,0.03);  /* barely-visible surface tint   */
+  --tint-md:      rgba(28,28,28,0.06);  /* medium tint — badges, done step */
+  --btn-shadow:
+    rgba(255,255,255,0.2) 0px 0.5px 0px 0px inset,
+    rgba(0,0,0,0.2)       0px 0px 0px 0.5px inset,
+    rgba(0,0,0,0.05)      0px 1px 2px 0px;
+  --focus-shadow: rgba(0,0,0,0.1) 0px 4px 12px;
+}
+
+/* ── Dark ────────────────────────────────────────────────────── */
+.dark {
+  --bg:           #1c1a17;   /* warm dark — mirrors cream warmth         */
+  --bg-subtle:    #141210;   /* deeper surface for secondary sections    */
+  --text:         #ede9e0;   /* warm off-white                           */
+  --text-muted:   #8a8680;   /* dimmed warm gray                         */
+  --border:       #2d2a25;   /* warm dark divider                        */
+  --border-act:   rgba(237,233,224,0.35);
+  --action-bg:    #ede9e0;   /* inverted: light button on dark bg        */
+  --action-text:  #1c1a17;   /* inverted: dark text on light button      */
+  --overlay:      rgba(0,0,0,0.55);
+  --tint:         rgba(237,233,224,0.03);
+  --tint-md:      rgba(237,233,224,0.06);
+  --btn-shadow:
+    rgba(255,255,255,0.12) 0px 0.5px 0px 0px inset,
+    rgba(0,0,0,0.45)       0px 0px 0px 0.5px inset,
+    rgba(0,0,0,0.25)       0px 1px 2px 0px;
+  --focus-shadow: rgba(0,0,0,0.4) 0px 4px 12px;
+}
+
+/* ── Reset ───────────────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -18,8 +59,9 @@ body,
 
 body {
   font-family: ui-sans-serif, system-ui, sans-serif;
-  background-color: #f7f4ed;
-  color: #1c1c1c;
+  background-color: var(--bg);
+  color: var(--text);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }

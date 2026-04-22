@@ -1,35 +1,70 @@
 /* Reference: ./DESIGN.md §5 Layout — hero 96px+ padding, stats bar, editorial typography */
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Truck, Star, Shield, Zap } from 'lucide-react';
 import { CATEGORIES } from '../services/products';
 import { Container } from '../components/ui/Container';
+
+const CATEGORY_ACCENT: Record<string, { bg: string; text: string; border: string }> = {
+  globos:    { bg: 'var(--cat-globos)',    text: 'var(--cat-globos-text)',    border: 'rgba(234,179,8,0.3)' },
+  decoracion:{ bg: 'var(--cat-deco)',      text: 'var(--cat-deco-text)',      border: 'rgba(22,163,74,0.25)' },
+  disfraces: { bg: 'var(--cat-disfraces)', text: 'var(--cat-disfraces-text)', border: 'rgba(124,58,237,0.25)' },
+  cotillon:  { bg: 'var(--cat-cotillon)',  text: 'var(--cat-cotillon-text)',  border: 'rgba(225,29,72,0.25)' },
+};
+
+const STATS = [
+  { value: '500+', label: 'Productos', icon: Star },
+  { value: '12K+', label: 'Fiestas realizadas', icon: Zap },
+  { value: '48h',  label: 'Envío express', icon: Truck },
+  { value: '100%', label: 'Garantía de calidad', icon: Shield },
+];
 
 export function HomePage() {
   return (
     <div style={{ width: '100%' }}>
 
       {/* ── Hero ── */}
-      <section style={{ width: '100%', padding: '96px 0', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ width: '100%', padding: '104px 0 96px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        {/* Warm festive gradient — pinks, amber, purple */}
         <div aria-hidden style={{
           pointerEvents: 'none', position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 80% 55% at 50% 0%, rgba(192,132,252,0.15) 0%, rgba(244,114,182,0.08) 45%, transparent 70%)',
+          background: 'radial-gradient(ellipse 70% 50% at 20% 20%, rgba(251,191,36,0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 45% at 80% 15%, rgba(244,114,182,0.14) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 50% 80%, rgba(167,139,250,0.10) 0%, transparent 65%)',
         }} />
+        {/* Floating emoji decoration */}
+        <div aria-hidden style={{ pointerEvents: 'none', position: 'absolute', inset: 0, overflow: 'hidden' }}>
+          {['🎈', '🎉', '✨', '🎊', '🥳', '🎀'].map((emoji, i) => (
+            <span key={i} style={{
+              position: 'absolute', fontSize: '22px', opacity: 0.18,
+              top: `${[18, 72, 30, 60, 14, 68][i]}%`,
+              left: `${[8, 12, 88, 85, 50, 94][i]}%`,
+              transform: `rotate(${[-15, 10, 20, -10, 5, -20][i]}deg)`,
+            }}>{emoji}</span>
+          ))}
+        </div>
         <Container>
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: 'easeOut' }}>
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+          <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }}>
+            <span style={{
+              display: 'inline-block', fontSize: '12px', fontWeight: 600,
+              color: 'var(--cat-cotillon-text)', backgroundColor: 'var(--cat-cotillon)',
+              border: '1px solid rgba(225,29,72,0.2)', borderRadius: '9999px',
+              padding: '4px 14px', marginBottom: '24px', letterSpacing: '0.06em', textTransform: 'uppercase',
+            }}>
               Todo para tu fiesta perfecta ✨
-            </p>
-            <h1 style={{ fontSize: 'clamp(2.25rem,5.5vw,3.75rem)', fontWeight: 600, lineHeight: 1.08, letterSpacing: '-1.5px', color: 'var(--text)', marginBottom: '24px' }}>
-              Hacé que cada celebración<br />sea mágica
+            </span>
+            <h1 style={{
+              fontSize: 'clamp(2.4rem,6vw,4rem)', fontWeight: 700,
+              lineHeight: 1.06, letterSpacing: '-1.5px', color: 'var(--text)',
+              marginBottom: '24px',
+            }}>
+              Hacé que cada<br />celebración sea mágica
             </h1>
-            <p style={{ fontSize: '18px', lineHeight: 1.38, color: 'var(--text-muted)', maxWidth: '420px', margin: '0 auto 40px' }}>
+            <p style={{ fontSize: '18px', lineHeight: 1.5, color: 'var(--text-muted)', maxWidth: '400px', margin: '0 auto 40px' }}>
               Globos, disfraces, decoración y cotillón. Envío a todo el país.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px' }}>
               <Link to="/productos" style={{
                 display: 'inline-flex', alignItems: 'center', gap: '8px',
-                padding: '10px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: 500,
+                padding: '11px 22px', borderRadius: '8px', fontSize: '14px', fontWeight: 600,
                 color: 'var(--action-text)', backgroundColor: 'var(--action-bg)',
                 textDecoration: 'none', boxShadow: 'var(--btn-shadow)', transition: 'opacity 0.15s',
               }}
@@ -38,16 +73,16 @@ export function HomePage() {
               >
                 Ver productos <ArrowRight style={{ width: 14, height: 14 }} />
               </Link>
-              <Link to="/productos" style={{
+              <Link to="/productos?categoria=cotillon" style={{
                 display: 'inline-flex', alignItems: 'center',
-                padding: '10px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: 500,
+                padding: '11px 22px', borderRadius: '8px', fontSize: '14px', fontWeight: 600,
                 color: 'var(--text)', backgroundColor: 'transparent',
                 border: '1px solid var(--border-act)', textDecoration: 'none', transition: 'opacity 0.15s',
               }}
                 onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
                 onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
               >
-                Ver ofertas
+                Ver ofertas 🎊
               </Link>
             </div>
           </motion.div>
@@ -57,16 +92,18 @@ export function HomePage() {
       {/* ── Stats Bar ── */}
       <section style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', backgroundColor: 'var(--bg-subtle)', padding: '40px 0', transition: 'background-color 0.25s ease' }}>
         <Container>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(140px,1fr))', gap: '32px', textAlign: 'center' }}>
-            {[
-              { value: '500+', label: 'Productos' },
-              { value: '12K+', label: 'Fiestas realizadas' },
-              { value: '48h',  label: 'Envío express' },
-              { value: '100%', label: 'Garantía de calidad' },
-            ].map(({ value, label }) => (
-              <div key={label}>
-                <p style={{ fontSize: 'clamp(2rem,4vw,3rem)', fontWeight: 600, letterSpacing: '-1.2px', color: 'var(--text)', marginBottom: '4px' }}>{value}</p>
-                <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{label}</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(150px,1fr))', gap: '32px', textAlign: 'center' }}>
+            {STATS.map(({ value, label, icon: Icon }) => (
+              <div key={label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                <div style={{
+                  width: '40px', height: '40px', borderRadius: '10px',
+                  backgroundColor: 'var(--tint-md)', border: '1px solid var(--border)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Icon style={{ width: 18, height: 18, color: 'var(--text-muted)' }} />
+                </div>
+                <p style={{ fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', fontWeight: 700, letterSpacing: '-1px', color: 'var(--text)', lineHeight: 1 }}>{value}</p>
+                <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{label}</p>
               </div>
             ))}
           </div>
@@ -76,25 +113,33 @@ export function HomePage() {
       {/* ── Categories ── */}
       <section style={{ padding: '80px 0' }}>
         <Container>
-          <h2 style={{ fontSize: 'clamp(1.5rem,3vw,2.25rem)', fontWeight: 600, letterSpacing: '-0.9px', color: 'var(--text)', marginBottom: '8px' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem,3vw,2.25rem)', fontWeight: 700, letterSpacing: '-0.9px', color: 'var(--text)', marginBottom: '8px' }}>
             Explorá por categoría
           </h2>
           <p style={{ fontSize: '16px', color: 'var(--text-muted)', marginBottom: '40px' }}>
             Encontrá exactamente lo que necesitás para tu fiesta.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(160px,1fr))', gap: '12px' }}>
-            {CATEGORIES.filter((c) => c.id !== 'todos').map(({ id, label, emoji }, i) => (
-              <motion.div key={id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
-                <Link to={`/productos?categoria=${id}`}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '24px 16px', borderRadius: '12px', backgroundColor: 'var(--bg)', border: '1px solid var(--border)', textDecoration: 'none', transition: 'border-color 0.15s' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--border-act)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}
-                >
-                  <span style={{ fontSize: '28px' }}>{emoji}</span>
-                  <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)' }}>{label}</span>
-                </Link>
-              </motion.div>
-            ))}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(168px,1fr))', gap: '14px' }}>
+            {CATEGORIES.filter((c) => c.id !== 'todos').map(({ id, label, emoji }, i) => {
+              const accent = CATEGORY_ACCENT[id] ?? { bg: 'var(--tint)', text: 'var(--text)', border: 'var(--border)' };
+              return (
+                <motion.div key={id} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}>
+                  <Link to={`/productos?categoria=${id}`} className="card-lift"
+                    style={{
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                      gap: '10px', padding: '28px 16px', borderRadius: '14px',
+                      backgroundColor: accent.bg, border: `1px solid ${accent.border}`,
+                      textDecoration: 'none',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = accent.text)}
+                    onMouseLeave={(e) => (e.currentTarget.style.borderColor = accent.border)}
+                  >
+                    <span style={{ fontSize: '32px' }}>{emoji}</span>
+                    <span style={{ fontSize: '14px', fontWeight: 600, color: accent.text }}>{label}</span>
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         </Container>
       </section>
@@ -103,27 +148,32 @@ export function HomePage() {
       <section style={{ paddingBottom: '80px' }}>
         <Container>
           <div style={{
-            backgroundColor: 'var(--action-bg)', borderRadius: '16px',
-            padding: '48px 32px', textAlign: 'center',
-            boxShadow: 'var(--btn-shadow)',
-            transition: 'background-color 0.25s ease',
+            borderRadius: '20px', padding: '56px 32px', textAlign: 'center', overflow: 'hidden', position: 'relative',
+            background: 'linear-gradient(135deg, #1c1c1c 0%, #2d2520 50%, #1c1c1c 100%)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
           }}>
-            <p style={{ fontSize: 'clamp(1.25rem,3vw,1.75rem)', fontWeight: 600, letterSpacing: '-0.9px', color: 'var(--action-text)', marginBottom: '8px' }}>
-              Envío gratis en compras +$10.000
+            {/* Subtle festive glow inside banner */}
+            <div aria-hidden style={{
+              pointerEvents: 'none', position: 'absolute', inset: 0,
+              background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(251,191,36,0.12) 0%, transparent 70%)',
+            }} />
+            <p style={{ fontSize: 'clamp(1.3rem,3vw,1.9rem)', fontWeight: 700, letterSpacing: '-0.9px', color: '#fcfbf8', marginBottom: '8px', position: 'relative' }}>
+              🚚 Envío gratis en compras +$10.000
             </p>
-            <p style={{ fontSize: '14px', color: 'var(--action-text)', opacity: 0.55, marginBottom: '24px' }}>
+            <p style={{ fontSize: '14px', color: 'rgba(252,251,248,0.55)', marginBottom: '28px', position: 'relative' }}>
               Celebrá con todo sin pagar de más.
             </p>
             <Link to="/productos" style={{
-              display: 'inline-flex', alignItems: 'center',
-              padding: '10px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: 500,
-              color: 'var(--action-bg)', backgroundColor: 'var(--action-text)',
-              textDecoration: 'none', transition: 'opacity 0.15s',
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              padding: '11px 24px', borderRadius: '8px', fontSize: '14px', fontWeight: 600,
+              color: '#1c1c1c', backgroundColor: '#fcfbf8',
+              textDecoration: 'none', transition: 'opacity 0.15s', position: 'relative',
+              boxShadow: 'rgba(255,255,255,0.2) 0px 0.5px 0px 0px inset, rgba(0,0,0,0.2) 0px 0px 0px 0.5px inset',
             }}
               onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
             >
-              Ver productos →
+              Ver productos <ArrowRight style={{ width: 14, height: 14 }} />
             </Link>
           </div>
         </Container>

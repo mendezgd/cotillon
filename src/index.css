@@ -1,4 +1,5 @@
 /* ./DESIGN.md — Lovable/Claude design system — light & dark tokens */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 /* ── Light (default) ─────────────────────────────────────────── */
@@ -19,6 +20,16 @@
     rgba(0,0,0,0.2)       0px 0px 0px 0.5px inset,
     rgba(0,0,0,0.05)      0px 1px 2px 0px;
   --focus-shadow: rgba(0,0,0,0.1) 0px 4px 12px;
+  /* Category accent palette */
+  --cat-globos:      #fde68a;
+  --cat-globos-text: #92400e;
+  --cat-deco:        #bbf7d0;
+  --cat-deco-text:   #14532d;
+  --cat-disfraces:   #ddd6fe;
+  --cat-disfraces-text: #4c1d95;
+  --cat-cotillon:    #fecdd3;
+  --cat-cotillon-text: #9f1239;
+  --navbar-bg:       rgba(247,244,237,0.82);
 }
 
 /* ── Dark ────────────────────────────────────────────────────── */
@@ -39,6 +50,16 @@
     rgba(0,0,0,0.45)       0px 0px 0px 0.5px inset,
     rgba(0,0,0,0.25)       0px 1px 2px 0px;
   --focus-shadow: rgba(0,0,0,0.4) 0px 4px 12px;
+  /* Category accent palette (muted for dark) */
+  --cat-globos:      rgba(253,230,138,0.15);
+  --cat-globos-text: #fcd34d;
+  --cat-deco:        rgba(187,247,208,0.12);
+  --cat-deco-text:   #6ee7b7;
+  --cat-disfraces:   rgba(221,214,254,0.12);
+  --cat-disfraces-text: #c4b5fd;
+  --cat-cotillon:    rgba(254,205,211,0.12);
+  --cat-cotillon-text: #fda4af;
+  --navbar-bg:       rgba(28,26,23,0.82);
 }
 
 /* ── Reset ───────────────────────────────────────────────────── */
@@ -58,10 +79,18 @@ body,
 }
 
 body {
-  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Nunito', ui-sans-serif, system-ui, sans-serif;
   background-color: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.15s;
+}
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }

@@ -22,7 +22,8 @@ export function ProductCard({ product }: Props) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      style={{ backgroundColor: 'var(--bg)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'border-color 0.15s, background-color 0.25s ease' }}
+      className="card-lift"
+      style={{ backgroundColor: 'var(--bg)', borderRadius: '14px', border: '1px solid var(--border)', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'var(--bg)' }}
       onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border-act)')}
       onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border)')}
     >

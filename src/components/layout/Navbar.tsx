@@ -39,7 +39,9 @@ export function Navbar() {
   return (
     <header style={{
       position: 'sticky', top: 0, zIndex: 50, width: '100%',
-      backgroundColor: 'var(--bg)',
+      backgroundColor: 'var(--navbar-bg)',
+      backdropFilter: 'blur(14px)',
+      WebkitBackdropFilter: 'blur(14px)',
       borderBottom: '1px solid var(--border)',
       transition: 'background-color 0.25s ease',
     }}>

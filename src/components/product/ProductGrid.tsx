@@ -14,23 +14,25 @@ export function ProductGrid() {
     <section style={{ padding: '40px 0' }}>
       <Container>
         {/* Filters */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '36px' }}>
           {CATEGORIES.map(({ id, label, emoji }) => {
             const isActive = activeCategory === id;
             return (
               <motion.button
                 key={id}
-                whileTap={{ opacity: 0.8 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setActiveCategory(id as Category)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '6px',
-                  padding: '6px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: 500,
-                  cursor: 'pointer', transition: 'all 0.15s',
+                  padding: '7px 16px', borderRadius: '9999px', fontSize: '13px', fontWeight: 600,
+                  cursor: 'pointer', transition: 'all 0.18s',
                   backgroundColor: isActive ? 'var(--action-bg)' : 'var(--bg)',
-                  color: isActive ? 'var(--action-text)' : 'var(--text)',
-                  border: isActive ? '1px solid var(--action-bg)' : '1px solid var(--border)',
+                  color: isActive ? 'var(--action-text)' : 'var(--text-muted)',
+                  border: isActive ? '1px solid transparent' : '1px solid var(--border)',
                   boxShadow: isActive ? 'var(--btn-shadow)' : 'none',
                 }}
+                onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--text)'; }}
+                onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--text-muted)'; }}
               >
                 <span>{emoji}</span>{label}
               </motion.button>

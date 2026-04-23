@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Truck, CheckCircle, Clock, XCircle, ChevronDown, ReceiptText, Sparkles } from 'lucide-react';
+import { Truck, CheckCircle, Clock, XCircle, ChevronDown, ReceiptText, Sparkles, Package } from 'lucide-react';
 import { useOrderStore } from '../store/orderStore';
+import { AdminProductsTab } from './AdminProductsTab';
 import type { OrderStatus } from '../types';
 
 /* ── Status config ─────────────────────────────────────────────── */
@@ -86,6 +87,7 @@ function PinGate({ onAuth }: { onAuth: () => void }) {
 /* ── Main admin page ────────────────────────────────────────────── */
 export function AdminPage() {
   const [authed, setAuthed] = useState(false);
+  const [tab, setTab] = useState<'pedidos' | 'productos'>('pedidos');
   const [filter, setFilter] = useState<OrderStatus | 'todos'>('todos');
   const [expanded, setExpanded] = useState<string | null>(null);
   const { orders, updateStatus } = useOrderStore();
@@ -106,7 +108,7 @@ export function AdminPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Sparkles style={{ width: 16, height: 16, opacity: 0.5 }} />
           <span style={{ fontWeight: 700, fontSize: '15px', color: 'var(--text)' }}>FiestaMágica</span>
-          <span style={{ fontSize: '12px', color: 'var(--text-muted)', borderLeft: '1px solid var(--border)', paddingLeft: '10px' }}>Panel de pedidos</span>
+          <span style={{ fontSize: '12px', color: 'var(--text-muted)', borderLeft: '1px solid var(--border)', paddingLeft: '10px' }}>Panel de administración</span>
         </div>
         <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'var(--text-muted)' }}>
           <span>🕐 Pendientes: <strong style={{ color: counts['pendiente'] ? '#92400e' : 'var(--text)' }}>{counts['pendiente'] ?? 0}</strong></span>
@@ -116,6 +118,37 @@ export function AdminPage() {
 
       <div style={{ maxWidth: '960px', margin: '0 auto', padding: '32px 24px' }}>
 
+        {/* Tab navigation */}
+        <div style={{ display: 'flex', gap: '4px', marginBottom: '32px', borderBottom: '1px solid var(--border)', paddingBottom: '0' }}>
+          {([
+            { id: 'pedidos',   label: 'Pedidos',   icon: <ReceiptText size={14} /> },
+            { id: 'productos', label: 'Productos',  icon: <Package size={14} /> },
+          ] as const).map(({ id, label, icon }) => {
+            const active = tab === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setTab(id)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  padding: '8px 16px', fontSize: '13px', fontWeight: 600,
+                  cursor: 'pointer', border: 'none', borderRadius: '8px 8px 0 0',
+                  backgroundColor: active ? 'var(--bg)' : 'transparent',
+                  color: active ? 'var(--text)' : 'var(--text-muted)',
+                  borderBottom: active ? '2px solid var(--action-bg)' : '2px solid transparent',
+                  marginBottom: '-1px',
+                }}
+              >
+                {icon} {label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Productos tab */}
+        {tab === 'productos' && <AdminProductsTab />}
+
+        {tab === 'pedidos' && <>
         {/* Stats row */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(130px,1fr))', gap: '12px', marginBottom: '32px' }}>
           {(['pendiente', 'comprobante_recibido', 'confirmado', 'enviado'] as OrderStatus[]).map((s) => {
@@ -296,6 +329,7 @@ export function AdminPage() {
             })}
           </div>
         )}
+        </>}
       </div>
     </div>
   );

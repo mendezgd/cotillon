@@ -2,13 +2,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProductCard } from './ProductCard';
-import { PRODUCTS, CATEGORIES } from '../../services/products';
+import { CATEGORIES } from '../../services/products';
+import { useProductStore } from '../../store/productStore';
 import { Container } from '../ui/Container';
 import type { Category } from '../../types';
 
 export function ProductGrid() {
   const [activeCategory, setActiveCategory] = useState<Category>('todos');
-  const filtered = activeCategory === 'todos' ? PRODUCTS : PRODUCTS.filter((p) => p.category === activeCategory);
+  const { products } = useProductStore();
+  const filtered = activeCategory === 'todos' ? products : products.filter((p) => p.category === activeCategory);
 
   return (
     <section style={{ padding: '40px 0' }}>
